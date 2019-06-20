@@ -1,0 +1,14 @@
+certifi==2019.6.16
+chardet==3.0.4
+Django==2.2.2
+djangorestframework==3.9.4
+docx==0.2.4
+docx2txt==0.7
+idna==2.8
+lxml==4.3.4
+Pillow==6.0.0
+python-docx==0.8.10
+pytz==2019.1
+requests==2.22.0
+sqlparse==0.3.0
+urllib3==1.25.3
