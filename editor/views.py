@@ -9,19 +9,41 @@ from django.http import HttpResponse
 from django.conf import settings
 import chardet
 import requests
+import re
 
 # Create your views here.
+
+def reptext(text):
+	print("")
+	try:
+		text = text.replace('___','#$#$')
+	except Exception as e:
+		pass
+
+	try:
+		text = text.replace('#$#$_','')
+		text = reptext(text)
+	except Exception as e:
+		pass
+
+	try:
+		text = text.replace('#$#$#$#$','#$#$')
+		# text = reptext(text)
+	except Exception as e:
+		pass
+	return text
 
 def readFile(request):
 	doc = fileUpload.objects.last()
 	my_text = docx2txt.process(settings.BASE_DIR+doc.file.url)
-	print(my_text)
+	nw = reptext(my_text)
 
-	return HttpResponse(my_text)
+	return HttpResponse(nw)
 
 def fileedit(request):
 
-	path = '/Users/subhashchandra/Downloads/myfile.docx'
+	doc = fileUpload.objects.last()
+	path = settings.BASE_DIR+doc.file.url
 	# days_file = open(path,'r')
 	days_file = open(path,'r',encoding = "ISO-8859-1")
 	days = days_file.read()

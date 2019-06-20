@@ -3,7 +3,25 @@ from django.conf import settings
 import docx2txt
 from .models import *
 
+def reptext(text):
+	print("")
+	try:
+		text = text.replace('___','#$#$')
+	except Exception as e:
+		pass
 
+	try:
+		text = text.replace('#$#$_','')
+		text = reptext(text)
+	except Exception as e:
+		pass
+
+	try:
+		text = text.replace('#$#$#$#$','#$#$')
+		# text = reptext(text)
+	except Exception as e:
+		pass
+	return text
 
 class FileSerializer(serializers.ModelSerializer):
 	
@@ -13,4 +31,4 @@ class FileSerializer(serializers.ModelSerializer):
 		fields= '__all__'
 
 	def details(self,obj):
-		return docx2txt.process(settings.BASE_DIR+obj.file.url)
+		return reptext(docx2txt.process(settings.BASE_DIR+obj.file.url))
