@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Online Editor</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<style type="text/css">
+		section{margin: 50px 0;}
+	</style>
+</head>
+<body>
+	<header></header>
+	<section class="container">
+		<div>
+			<form method="post">
+				<div>{{data|safe}}</div>
+				<button type="submit" class="btn btn-primary">Update</button>
+			</form>
+		</div>
+	</section>
+	<footer></footer>
+</body>
+</html>

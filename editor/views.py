@@ -40,6 +40,16 @@ def readFile(request):
 
 	return HttpResponse(nw)
 
+def update(request,pk):
+	doc = fileUpload.objects.get(pk=pk)
+	my_text = docx2txt.process(settings.BASE_DIR+doc.file.url)
+	data = reptext(my_text)
+
+	data = data.replace('#$#$','<input type="text">')
+
+	return render(request,'update.html',{'data':data})
+	# return HttpResponse(nw)
+
 def fileedit(request):
 
 	doc = fileUpload.objects.last()

@@ -10,4 +10,5 @@ urlpatterns = [
 	path('api/v1/', include(router.urls)),
 	path('read/', views.readFile, name='read'),
 	path('fileedit/', views.fileedit, name='fileedit'),
+	path('update/<int:pk>/', views.update, name='update'),
 ]
