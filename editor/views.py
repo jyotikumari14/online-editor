@@ -6,13 +6,15 @@ from .serializers import *
 import docx2txt
 import docx
 from django.http import HttpResponse
+from django.conf import settings
 import chardet
 import requests
 
 # Create your views here.
 
 def readFile(request):
-	my_text = docx2txt.process("/Users/subhashchandra/Downloads/myfile.docx")
+	doc = fileUpload.objects.last()
+	my_text = docx2txt.process(settings.BASE_DIR+doc.file.url)
 	print(my_text)
 
 	return HttpResponse(my_text)
