@@ -6,6 +6,9 @@ class fileUpload(models.Model):
 
 	name = models.CharField(max_length=100)
 	file = models.FileField(upload_to="file/")
+	content = models.TextField(blank=True)
+	data = models.TextField(blank=True)
+	length = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.name
