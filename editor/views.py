@@ -45,6 +45,9 @@ def update(request,pk):
 	my_text = docx2txt.process(settings.BASE_DIR+doc.file.url)
 	data = reptext(my_text)
 
+	data = data.replace('\n\n','\n')
+	data = data.replace('\n\n','\n')
+	data = data.replace('\n','</br>')
 	data = data.replace('#$#$','<input type="text">')
 
 	return render(request,'update.html',{'data':data})
