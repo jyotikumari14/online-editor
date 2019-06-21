@@ -13,6 +13,9 @@ import re
 
 # Create your views here.
 
+def home(request):
+	return render(request,'dist/index.html')
+
 def reptext(text):
 	print("")
 	try:
