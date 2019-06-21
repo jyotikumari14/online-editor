@@ -4,7 +4,7 @@ from django import forms
 # Create your models here.
 class fileUpload(models.Model):
 
-	name = models.CharField(max_length=100)
+	name = models.CharField(max_length=100, null=True, blank=True)
 	file = models.FileField(upload_to="file/")
 	content = models.TextField(blank=True)
 	data = models.TextField(blank=True)
