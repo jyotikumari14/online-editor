@@ -113,7 +113,9 @@ var AppComponent = /** @class */ (function () {
         this.title = 'file-upload';
         this.uploader = new ng2_file_upload_ng2_file_upload__WEBPACK_IMPORTED_MODULE_4__["FileUploader"]({ url: URL + 'file/', itemAlias: 'file' });
         var doc = JSON.parse(localStorage.getItem("formdata"));
-        this.loadData(doc.id);
+        if (doc) {
+            this.loadData(doc.id);
+        }
     }
     AppComponent.prototype.loadData = function (id) {
         var _this = this;

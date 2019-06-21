@@ -43,5 +43,5 @@ class FileSerializer(serializers.ModelSerializer):
 		data = data.replace('\n \n','\n')
 		data = re.sub(r'\n+', '\n', data).strip()
 		data = data.replace('\n','</br>')
-		data = data.replace('#$#$','<input type="text" name="content[]">')
+		data = data.replace('#$#$','<input type="text" name="content[]" value="123">')
 		return data
