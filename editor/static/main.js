@@ -103,37 +103,55 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // const URL = 'http://localhost:3000/api/upload';
-// const URL = 'http://3.17.180.228:8000/api/v1/';
-var URL = 'http://127.0.0.1:8000/api/v1/';
+var URL = 'http://3.17.180.228:8000/api/v1/';
+// const URL = 'http://127.0.0.1:8000/api/v1/';
+var fdata = '';
 var AppComponent = /** @class */ (function () {
     function AppComponent(httpClient, sanitizer) {
-        var _this = this;
         this.httpClient = httpClient;
         this.sanitizer = sanitizer;
         this.title = 'file-upload';
         this.uploader = new ng2_file_upload_ng2_file_upload__WEBPACK_IMPORTED_MODULE_4__["FileUploader"]({ url: URL + 'file/', itemAlias: 'file' });
-        this.oldfile().subscribe(function (res) {
+        var doc = JSON.parse(localStorage.getItem("formdata"));
+        this.loadData(doc.id);
+    }
+    AppComponent.prototype.loadData = function (id) {
+        var _this = this;
+        this.oldfile(id).subscribe(function (res) {
             _this.webdata = res;
-            _this.final = sanitizer.bypassSecurityTrustHtml(_this.webdata.html);
+            _this.final = _this.sanitizer.bypassSecurityTrustHtml(_this.webdata.html);
             // console.log(res);
         }, function (err) { return _this.error = err; });
-    }
-    AppComponent.prototype.oldfile = function () {
-        var url = URL + "file/1/";
+    };
+    AppComponent.prototype.oldfile = function (id) {
+        var url = URL + "file/" + id + "/";
         return this.httpClient.get(url);
     };
     AppComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.uploader.onAfterAddingFile = function (file) { file.withCredentials = false; };
         this.uploader.onCompleteItem = function (item, response, status, headers) {
-            console.log('ImageUpload:uploaded:', item, status, response);
+            // console.log('ImageUpload:uploaded:', item, status, response);
+            localStorage.setItem("formdata", response);
+            _this.loadData(JSON.parse(response).id);
             alert('File uploaded successfully');
         };
         jquery__WEBPACK_IMPORTED_MODULE_5__(document).ready(function () {
-            // alert("Hello");
             jquery__WEBPACK_IMPORTED_MODULE_5__(".update").click(function () {
-                var arr = {};
-                console.log(jquery__WEBPACK_IMPORTED_MODULE_5__(".editor input").length);
-                console.log(jquery__WEBPACK_IMPORTED_MODULE_5__(".editor").serializeArray());
+                var fdata = new Array();
+                var inputs = jquery__WEBPACK_IMPORTED_MODULE_5__(".editor").serializeArray();
+                jquery__WEBPACK_IMPORTED_MODULE_5__["each"](inputs, function (index, element) {
+                    fdata.push(element.value);
+                });
+                console.log(fdata);
+                jquery__WEBPACK_IMPORTED_MODULE_5__["ajax"]({
+                    url: URL + "file/1/",
+                    type: 'PATCH',
+                    data: { 'length': fdata.length, 'data': JSON.stringify(fdata) },
+                    success: function (result) {
+                        alert('Document Updated.');
+                    }
+                });
             });
         });
     };
