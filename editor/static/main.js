@@ -112,8 +112,9 @@ var AppComponent = /** @class */ (function () {
         this.sanitizer = sanitizer;
         this.title = 'file-upload';
         this.uploader = new ng2_file_upload_ng2_file_upload__WEBPACK_IMPORTED_MODULE_4__["FileUploader"]({ url: URL + 'file/', itemAlias: 'file' });
-        var doc = JSON.parse(localStorage.getItem("formdata"));
-        if (doc) {
+        // console.log(localStorage.getItem("formdata"));
+        if (localStorage.getItem("formdata")) {
+            var doc = JSON.parse(localStorage.getItem("formdata"));
             this.loadData(doc.id);
         }
     }
@@ -134,7 +135,9 @@ var AppComponent = /** @class */ (function () {
         this.uploader.onAfterAddingFile = function (file) { file.withCredentials = false; };
         this.uploader.onCompleteItem = function (item, response, status, headers) {
             // console.log('ImageUpload:uploaded:', item, status, response);
-            localStorage.setItem("formdata", response);
+            if (JSON.parse(response).id) {
+                localStorage.setItem("formdata", response);
+            }
             _this.loadData(JSON.parse(response).id);
             alert('File uploaded successfully');
         };
@@ -146,8 +149,9 @@ var AppComponent = /** @class */ (function () {
                     fdata.push(element.value);
                 });
                 console.log(fdata);
+                var doc = JSON.parse(localStorage.getItem("formdata"));
                 jquery__WEBPACK_IMPORTED_MODULE_5__["ajax"]({
-                    url: URL + "file/1/",
+                    url: URL + "file/" + doc.id + "/",
                     type: 'PATCH',
                     data: { 'length': fdata.length, 'data': JSON.stringify(fdata) },
                     success: function (result) {

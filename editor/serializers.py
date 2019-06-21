@@ -29,7 +29,7 @@ class FileSerializer(serializers.ModelSerializer):
 	
 	detail = serializers.SerializerMethodField('details')
 	html = serializers.SerializerMethodField('hdata')
-	data = serializers.SerializerMethodField('fdata')
+	fldata = serializers.SerializerMethodField('fdata')
 	class Meta:
 		model = fileUpload
 		fields= '__all__'
