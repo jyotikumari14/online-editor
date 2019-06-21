@@ -74,7 +74,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div class=\"container\">\n  <h2>Upload Document</h2>\n  <form  (ngSubmit)=\"onSubmit(fileForm)\">\n    <div class=\"form-group\">\n      <label for=\"name\">Name:</label>\n      <input type=\"text\" class=\"form-control\" name=\"name\"   [(ngModel)]=\"fileForm.name\" required >\n    </div>\n    <div class=\"form-group\">\n      <label for=\"file\">File:</label>\n      <input type=\"file\" class=\"form-control\" name=\"mydoc\" [(ngModel)]=\"fileForm.file\" required >\n    </div>\n    <button type=\"submit\" class=\"btn btn-default\">Upload</button>\n  </form>\n</div>\n\n<div class=\"container\">\n  <h2>Fill the Document</h2>\n  <form (ngSubmit)=\"SubForm()\" method=\"post\" style=\"margin: 50px 0;\">\n    <div [innerHTML]=\"final\"></div>\n    <button class=\"btn btn-primary\">Update</button>\n  </form>\n</div>\n\n<router-outlet></router-outlet>\n"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css\">\n  <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js\"></script>\n  <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js\"></script>\n<div class=\"container\">\n  <h2>Upload Document</h2>\n  <form enctype=\"multipart/form-data\">\n    <!-- <div class=\"form-group\">\n      <label for=\"name\">Name:</label>\n      <input type=\"text\" class=\"form-control\" name=\"name\"  >\n    </div> -->\n    <div class=\"form-group\">\n      <label for=\"file\">File:</label>\n      <input type=\"file\" class=\"form-control\" name=\"file\" ng2FileSelect [uploader]=\"uploader\"  >\n    </div>\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"uploader.uploadAll()\" \n  [disabled]=\"!uploader.getNotUploadedItems().length\">Upload</button>\n  </form>\n</div>\n\n<div class=\"container\">\n  <h2>Fill the Document</h2>\n  <form (ngSubmit)=\"SubForm()\" class=\"editor\" onsubmit=\"return false;\" style=\"margin: 50px 0;\">\n    <div [innerHTML]=\"final\"></div>\n    <button class=\"btn btn-primary update\" type=\"submit\">Update</button>\n  </form>\n</div>\n\n\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -91,27 +91,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
+/* harmony import */ var ng2_file_upload_ng2_file_upload__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ng2-file-upload/ng2-file-upload */ "./node_modules/ng2-file-upload/ng2-file-upload.js");
+/* harmony import */ var ng2_file_upload_ng2_file_upload__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(ng2_file_upload_ng2_file_upload__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_5__);
 
 
 
 
 
 
+// const URL = 'http://localhost:3000/api/upload';
+// const URL = 'http://3.17.180.228:8000/api/v1/';
+var URL = 'http://127.0.0.1:8000/api/v1/';
 var AppComponent = /** @class */ (function () {
-    function AppComponent(httpClient, formBuilder, sanitizer) {
+    function AppComponent(httpClient, sanitizer) {
         var _this = this;
         this.httpClient = httpClient;
-        this.formBuilder = formBuilder;
         this.sanitizer = sanitizer;
-        this.title = 'online-editor-angular';
-        this.SERVER_URL = "http://localhost:3000";
-        this.apiUrl = "http://127.0.0.1:8000/api/v1/";
-        this.userId = 1;
-        this.uploadResponse = { status: '', message: '', filePath: '' };
-        this.fileForm = { file: '', name: '' };
+        this.title = 'file-upload';
+        this.uploader = new ng2_file_upload_ng2_file_upload__WEBPACK_IMPORTED_MODULE_4__["FileUploader"]({ url: URL + 'file/', itemAlias: 'file' });
         this.oldfile().subscribe(function (res) {
             _this.webdata = res;
             _this.final = sanitizer.bypassSecurityTrustHtml(_this.webdata.html);
@@ -119,36 +119,23 @@ var AppComponent = /** @class */ (function () {
         }, function (err) { return _this.error = err; });
     }
     AppComponent.prototype.oldfile = function () {
-        var url = this.apiUrl + "file/1/";
+        var url = URL + "file/1/";
         return this.httpClient.get(url);
     };
-    AppComponent.prototype.upload = function (data) {
-        var uploadURL = this.apiUrl + "file/";
-        console.log(data);
-        return this.httpClient.post(uploadURL, data, {
-            reportProgress: true,
-            observe: 'events'
-        }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (event) {
-            switch (event.type) {
-                case _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpEventType"].UploadProgress:
-                    var progress = Math.round(100 * event.loaded / event.total);
-                    return { status: 'progress', message: progress };
-                case _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpEventType"].Response:
-                    return event.body;
-                default:
-                    return "Unhandled event: " + event.type;
-            }
-        }));
-    };
-    AppComponent.prototype.onSubmit = function (data) {
-        var _this = this;
-        console.log(data);
-        // const formData = new FormData();
-        // formData.append('file', this.form.get('mydoc').value);
-        // formData.append('name', this.form.get('name').value);
-        // console.log(formData);
-        // console.log(this.userId);
-        this.upload(data).subscribe(function (res) { return _this.uploadResponse = res; }, function (err) { return _this.error = err; });
+    AppComponent.prototype.ngOnInit = function () {
+        this.uploader.onAfterAddingFile = function (file) { file.withCredentials = false; };
+        this.uploader.onCompleteItem = function (item, response, status, headers) {
+            console.log('ImageUpload:uploaded:', item, status, response);
+            alert('File uploaded successfully');
+        };
+        jquery__WEBPACK_IMPORTED_MODULE_5__(document).ready(function () {
+            // alert("Hello");
+            jquery__WEBPACK_IMPORTED_MODULE_5__(".update").click(function () {
+                var arr = {};
+                console.log(jquery__WEBPACK_IMPORTED_MODULE_5__(".editor input").length);
+                console.log(jquery__WEBPACK_IMPORTED_MODULE_5__(".editor").serializeArray());
+            });
+        });
     };
     AppComponent.prototype.SubForm = function () {
         console.log("Hello");
@@ -159,7 +146,7 @@ var AppComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"], _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormBuilder"], _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__["DomSanitizer"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"], _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__["DomSanitizer"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -181,11 +168,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-
+/* harmony import */ var ng2_file_upload__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ng2-file-upload */ "./node_modules/ng2-file-upload/index.js");
+/* harmony import */ var ng2_file_upload__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ng2_file_upload__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 
 
 
@@ -199,17 +186,16 @@ var AppModule = /** @class */ (function () {
     AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
             declarations: [
-                _app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"]
+                _app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"],
+                ng2_file_upload__WEBPACK_IMPORTED_MODULE_3__["FileSelectDirective"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
-                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"],
-                _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"],
-                _app_routing_module__WEBPACK_IMPORTED_MODULE_5__["AppRoutingModule"],
-                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"]
+                _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"],
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClientModule"],
             ],
             providers: [],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
         })
     ], AppModule);
     return AppModule;
